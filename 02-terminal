@@ -1,0 +1,101 @@
+1.Команда cd это встроенная команда оболочки. 
+работает внутри сессии терминала, проще изменять указатель на текущую директорию внутренней функцией. 
+можно сделать cd внешней программой, но тогда придётся вызывать новый shell при каждом переходе в другой каталог и соответственно плодить кучу отдельных сессий.
+
+2.вывести количество строк с совпадением можно командой grep <some_string> <some_file> -с
+
+3. systemd
+vagrant@vagrant:~$ pstree -p
+systemd(1)─┬─VBoxService(925)─┬─{VBoxService}(928)
+           │                  ├─{VBoxService}(929)
+           │                  ├─{VBoxService}(930)
+           │                  ├─{VBoxService}(931)
+           │                  ├─{VBoxService}(935)
+           │                  ├─{VBoxService}(937)
+           │                  ├─{VBoxService}(939)
+           │                  └─{VBoxService}(940)
+           ├─accounts-daemon(600)─┬─{accounts-daemon}(608)
+           │                      └─{accounts-daemon}(701)
+           
+
+4.
+pts0
+vagrant@vagrant:~$ ls /test 2>/dev/pts/1
+
+pts1
+vagrant@vagrant:~$ ls: cannot access '/test': No such file or directory
+
+5. да, получится
+vagrant@vagrant:~$ cat test
+123
+test
+vagrant@vagrant:~$ cat <test >test1
+vagrant@vagrant:~$ cat test1
+123
+test
+
+6. можно вывести с помошью перенаправление вывода
+vagrant@vagrant:~$ echo test >/dev/tty1
+
+7.
+bash 5>&1 создаёт дискриптор 5 и перенаправляет его в stdout
+echo netology > /proc/$$/fd/5 перенаправляет вывод команды echo в дискриптор 5 который перенаправлен в stdout
+если предварительно не выполнить комманду bash 5>&1 выдаст ошибку так как дискриптора 5 не существует.
+
+vagrant@vagrant:~$ bash 5>&1
+vagrant@vagrant:~$ echo netology > /proc/$$/fd/5
+netology
+
+8.
+vagrant@vagrant:~$ ls /&&ls /test 5>&2 2>&1 1>&5 | grep test
+bin    dev   lib    libx32      mnt   root  snap      sys  vagrant
+boot   etc   lib32  lost+found  opt   run   srv       tmp  var
+cdrom  home  lib64  media       proc  sbin  swap.img  usr
+ls: cannot access '/test': No such file or directory
+
+5>&2 создаём новый дискриптор и перенаправляем в stderr
+2>&1 stderr перенаправляем в stdout
+1>&5 stdout перенаправляем в повый дискриптор
+
+9.
+команда выводит список переменных окружения, аналогичный вывод можно получить командами 
+env
+printenv
+
+10.
+/proc/<PID>/cmdline - Этот файл содержит полную командную строку запуска процесса, кроме зомби процессов в этом случаи в файле ничего нет, то есть чтение этого файла вернет 0 символов.
+Аргументы командной строки в этом файле указаны как список строк, каждая из которых завешается нулевым символом, с добавочным нулевым байтом после последней строки. 
+/proc/<PID>/exe - Под Linux 2.2 и 2.4 exe является символьной ссылкой, содержащей фактическое полное имя выполняемого файла. Символьная ссылка exe может использоваться обычным образом - при попытке открыть exe будет открыт исполняемый файл. 
+Вы можете даже ввести /proc/[pid]/exe чтобы запустить другую копию процесса такого же как и процесс с номером [pid].
+Под Linux 2.0 и в более ранних версиях exe является указателем на запущенный файл и является символьной ссылкой. 
+
+11.
+SSE 4.2
+vagrant@vagrant:~$ grep sse /proc/cpuinfo
+
+12.
+при подключении ожидается пользователь, а не процесс, нет локального tty. 
+можно добавить -t -  принудительное создание псевдотерминала
+
+13.
+pts0
+vagrant@vagrant:~$ top
+Ctrl+Z
+vagrant@vagrant:~$ jobs -l
+[1]+   997 Stopped (signal)        top
+
+pts1
+vagrant@vagrant:~$ reptyr 997
+top - 11:12:17 up 6 min,  2 users,  load average: 0.08, 0.09, 0.04
+Tasks: 109 total,   2 running, 106 sleeping,   0 stopped,   1 zombie
+%Cpu(s):  0.0 us,  0.2 sy,  0.0 ni, 99.8 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :    981.0 total,    540.9 free,    128.7 used,    311.4 buff/cache
+MiB Swap:   1962.0 total,   1962.0 free,      0.0 used.    706.1 avail Mem
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+   1048 vagrant   20   0    2592   1812   1708 R   9.0   0.2   0:17.33 reptyr
+    997 vagrant   20   0    9244   3948   3288 R   0.3   0.4   0:00.30 top
+   1068 root      20   0       0      0      0 I   0.3   0.0   0:00.01 kworker/0:0-events
+
+14.
+команда tee копирует данные с stdin в фаил и в stdout, в данном примере команда запускается от sudo , соотвественно имеет права на запись в файл 
