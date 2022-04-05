@@ -1,6 +1,6 @@
 ## Обязательная задача 1
 Мы выгрузили JSON, который получили через API запрос к нашему сервису:
-```
+```json
     { "info" : "Sample JSON output from our service\t",
         "elements" :[
             { "name" : "first",
@@ -15,7 +15,7 @@
     }
 ```
   Нужно найти и исправить все ошибки, которые допускает наш сервис
-```
+```json
 { "info": "Sample JSON output from our service\t",
   "elements": [
     {
@@ -81,11 +81,20 @@ google.com - 64.233.165.139
 
 ### json-файл(ы), который(е) записал ваш скрипт:
 ```json
-???
+{
+  "drive.google.com": "74.125.131.194",
+  "mail.google.com": "108.177.14.19",
+  "google.com": "173.194.222.102"
+}
 ```
 
 ### yml-файл(ы), который(е) записал ваш скрипт:
 ```yaml
-???
+---
+drive.google.com: 74.125.131.194
+google.com: 173.194.222.102
+mail.google.com: 108.177.14.19
+...
+
 ```
 
