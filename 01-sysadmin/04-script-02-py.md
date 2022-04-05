@@ -96,10 +96,41 @@ no git repository
 
 ### Ваш скрипт:
 ```python
-???
+#!/usr/bin/env python3
+
+import socket
+import json
+
+host_file = 'hosts.json'
+names = ['drive.google.com', 'mail.google.com', 'google.com']
+
+try:
+    with open(host_file) as js_file:
+        log_data = json.load(js_file)
+except IOError:
+    log_data = {}
+
+for name_ip in names:
+    ip_address = socket.gethostbyname(name_ip)
+    if name_ip in log_data:
+        old_ip = log_data[name_ip]
+        if old_ip != ip_address:
+            print('[ERROR] {} IP mismatch: {} - {}'.format(name_ip, old_ip, ip_address))
+            
+    print('{} - {}'.format(name_ip, ip_address))
+    log_data[name_ip] = ip_address
+
+with open(host_file, 'w') as js_out:
+    json.dump(log_data, js_out, indent=2)
+
 ```
 
 ### Вывод скрипта при запуске при тестировании:
 ```
-???
+drive.google.com - 173.194.222.194
+[ERROR] mail.google.com IP mismatch: 108.177.14.17 - 108.177.14.18
+mail.google.com - 108.177.14.18
+[ERROR] google.com IP mismatch: 173.194.222.113 - 64.233.165.113
+google.com - 64.233.165.113
+
 ```
