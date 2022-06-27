@@ -7,7 +7,8 @@
 в который будут складываться данные БД и бэкапы.
 
 Приведите получившуюся команду или docker-compose манифест.
-```
+
+```sh
 [version: "3.9"
 services:
   postgres:
@@ -255,11 +256,13 @@ test_db=# EXPLAIN SELECT c.фамилия, o.наименование FROM clien
 (5 строк)
 
 ```
+
 Для каждой строки по полю "заказ" будет проверено, соответствует ли она чему-то в кеше orders
 если соответствия нет строка будет пропущена.
 - cost - затраты процессорного времени на поиск первой записи и сбор всей выборки.
 - rows - количество возвращаемых строк при выполнении операции.
 - width - средний размер одной строки в байтах.
+
 
 ## Задача 6
 
@@ -273,4 +276,48 @@ test_db=# EXPLAIN SELECT c.фамилия, o.наименование FROM clien
 
 Приведите список операций, который вы применяли для бэкапа данных и восстановления.
 
+```sh
+root@6a544ff28c41:/# pg_dumpall -h localhost -U admin > /var/lib/postgresql/backup/test_db.sql
+root@6a544ff28c41:/# exit
+exit
+[haku@pc1 docker]$ docker compose stop
+[haku@pc1 docker]$ docker compose up
+[+] Running 1/0
+ ⠿ Container pg12.2  Created
+
+[haku@pc1 docker]$ docker exec -it pg12.2 bash
+root@a0ddf273779c:/# psql -h localhost -U admin test_db
+psql: error: connection to server at "localhost" (127.0.0.1), port 5432 failed: FATAL:  database "test_db" does not exist
+root@a0ddf273779c:/# psql -h localhost -Uadmin -f /var/lib/postgresql/backup/test_db.sql db1
+root@a0ddf273779c:/# psql -h localhost -U admin test_db
+psql (12.11 (Debian 12.11-1.pgdg110+1))
+Type "help" for help.
+
+test_db=# \l
+                                 List of databases
+  Name    | Owner | Encoding |  Collate   |   Ctype    |     Access privileges      
+-----------+-------+----------+------------+------------+----------------------------
+db1       | admin | UTF8     | en_US.utf8 | en_US.utf8 |
+postgres  | admin | UTF8     | en_US.utf8 | en_US.utf8 |
+template0 | admin | UTF8     | en_US.utf8 | en_US.utf8 | =c/admin                  +
+          |       |          |            |            | admin=CTc/admin
+template1 | admin | UTF8     | en_US.utf8 | en_US.utf8 | =c/admin                  +
+          |       |          |            |            | admin=CTc/admin
+test_db   | admin | UTF8     | en_US.utf8 | en_US.utf8 | =Tc/admin                 +
+          |       |          |            |            | admin=CTc/admin           +
+          |       |          |            |            | "test-simple-user"=c/admin
+(5 rows)
+
+test_db=# \d+
+                           List of relations
+ Schema |      Name      |   Type   | Owner |    Size    | Description
+--------+----------------+----------+-------+------------+-------------
+ public | clients        | table    | admin | 16 kB      |
+ public | clients_id_seq | sequence | admin | 8192 bytes |
+ public | orders         | table    | admin | 16 kB      |
+ public | orders_id_seq  | sequence | admin | 8192 bytes |
+(4 rows)
+
+
+```
 ---
