@@ -93,9 +93,9 @@ sh-4.2$ curl -X GET 'localhost:9200/'
   "tagline" : "You Know, for Search"
 }
 ```
-[Dockerfile](src\Dockerfile)
+[Dockerfile](src/Dockerfile)
 
-[elasticsearch.yml](src\elasticsearch.yml)
+[elasticsearch.yml](src/elasticsearch.yml)
 
 ## Задача 2
 
