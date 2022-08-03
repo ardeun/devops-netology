@@ -34,14 +34,68 @@
 ---
 
 ```sh
+FROM centos:7
 
+RUN yum update -y &&\
+    yum install wget -y && \
+    yum install perl-Digest-SHA -y
+
+RUN wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.3.3-linux-x86_64.tar.gz && \
+    wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.3.3-linux-x86_64.tar.gz.sha512 && \
+    shasum -a 512 -c elasticsearch-8.3.3-linux-x86_64.tar.gz.sha512 && \ 
+    tar -xzf elasticsearch-8.3.3-linux-x86_64.tar.gz && \
+    mv elasticsearch-8.3.3  /usr/share/elasticsearch &&\
+    rm elasticsearch-8.3.3-linux-x86_64.tar.gz
+
+
+RUN adduser -m -u 1000 elasticsearch && \
+    mkdir /var/lib/logs && \
+    mkdir /var/lib/data && \
+    mkdir /usr/share/elasticsearch/snapshots && \
+    chown -R elasticsearch:elasticsearch /usr/share/elasticsearch && \
+    chown -R elasticsearch:elasticsearch /var/lib/logs && \
+    chown -R elasticsearch:elasticsearch /var/lib/data
+
+WORKDIR /usr/share/elasticsearch
+
+COPY elasticsearch.yml config/
+
+ENV PATH /usr/share/elasticsearch/bin:$PATH \
+    ES_HOME="/usr/share/elasticsearch" \
+    ES_PATH_CONF="/usr/share/elasticsearch/config"
+
+EXPOSE 9200 9300
+
+USER elasticsearch
+CMD ["/usr/share/elasticsearch/bin/elasticsearch"]
 
 ```
+
+<https://hub.docker.com/r/ardeun/elasticsearch>
 
 ```sh
-
+sh-4.2$ curl -X GET 'localhost:9200/'
+{
+  "name" : "netology_test",
+  "cluster_name" : "elasticsearch",
+  "cluster_uuid" : "95byBpCvT8a2XzkwAWtPeg",
+  "version" : {
+    "number" : "8.3.3",
+    "build_flavor" : "default",
+    "build_type" : "tar",
+    "build_hash" : "801fed82df74dbe537f89b71b098ccaff88d2c56",
+    "build_date" : "2022-07-23T19:30:09.227964828Z",
+    "build_snapshot" : false,
+    "lucene_version" : "9.2.0",
+    "minimum_wire_compatibility_version" : "7.17.0",
+    "minimum_index_compatibility_version" : "7.0.0"
+  },
+  "tagline" : "You Know, for Search"
+}
 ```
+[Dockerfile](src\Dockerfile)
 
+[elasticsearch.yml](src\elasticsearch.yml)
 
 ## Задача 2
 
