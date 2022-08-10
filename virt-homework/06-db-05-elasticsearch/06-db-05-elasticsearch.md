@@ -3,6 +3,7 @@
 ## Задача 1
 
 В этом задании вы потренируетесь в:
+
 - установке elasticsearch
 - первоначальном конфигурировании elastcisearch
 - запуске elasticsearch в docker
@@ -15,15 +16,18 @@
 - запустите контейнер из получившегося образа и выполните запрос пути `/` c хост-машины
 
 Требования к `elasticsearch.yml`:
+
 - данные `path` должны сохраняться в `/var/lib`
 - имя ноды должно быть `netology_test`
 
 В ответе приведите:
+
 - текст Dockerfile манифеста
 - ссылку на образ в репозитории dockerhub
 - ответ `elasticsearch` на запрос пути `/` в json виде
 
 Подсказки:
+
 - возможно вам понадобится установка пакета perl-Digest-SHA для корректной работы пакета shasum
 - при сетевых проблемах внимательно изучите кластерные и сетевые настройки в elasticsearch.yml
 - при некоторых проблемах вам поможет docker директива ulimit
@@ -93,13 +97,15 @@ sh-4.2$ curl -X GET 'localhost:9200/'
   "tagline" : "You Know, for Search"
 }
 ```
-[Dockerfile](src\Dockerfile)
 
-[elasticsearch.yml](src\elasticsearch.yml)
+[Dockerfile](src/Dockerfile)
+
+[elasticsearch.yml](src/elasticsearch.yml)
 
 ## Задача 2
 
 В этом задании вы научитесь:
+
 - создавать и удалять индексы
 - изучать состояние кластера
 - обосновывать причину деградации доступности данных
@@ -121,10 +127,11 @@ sh-4.2$ curl -X GET 'localhost:9200/'
 
 Удалите все индексы.
 
-**Важно**
+### *Важно*
 
 При проектировании кластера elasticsearch нужно корректно рассчитывать количество реплик и шард,
 иначе возможна потеря данных индексов, вплоть до полной, при деградации системы.
+
 ```sh
 curl -X PUT localhost:9200/ind-1 -H 'Content-Type: application/json' -d'{ "settings": { "number_of_shards": 1,  "number_of_replicas": 0 }}'
 
@@ -162,11 +169,13 @@ curl -XGET localhost:9200/_cluster/health/?pretty=true
 curl -X DELETE 'http://localhost:9200/_all'
 {"acknowledged":true}
 ```
+
 - с состоянием yellow индексы для которых настроены реплики, так как в кластере только одна нода реплики делать некуда.
 
 ## Задача 3
 
 В данном задании вы научитесь:
+
 - создавать бэкапы данных
 - восстанавливать индексы из бэкапов
 
@@ -189,6 +198,7 @@ sh-4.2$ curl -X PUT localhost:9200/_snapshot/netology_backup -H 'Content-Type: a
 }'
 {"acknowledged":true}
 ```
+
 Создайте индекс `test` с 0 реплик и 1 шардом и **приведите в ответе** список индексов.
 
 [Создайте `snapshot`](https://www.elastic.co/guide/en/elasticsearch/reference/current/snapshots-take-snapshot.html)
@@ -266,6 +276,7 @@ green open test-2 P7l3LdrrQ4SS7dzRly3r-g 1 0 0 0 225b 225b
 ```
 
 Подсказки:
+
 - возможно вам понадобится доработать `elasticsearch.yml` в части директивы `path.repo` и перезапустить `elasticsearch`
 
 ---
