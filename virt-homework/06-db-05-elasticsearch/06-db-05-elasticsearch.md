@@ -37,7 +37,7 @@
 
 ---
 
-```sh
+```dockerfile
 FROM centos:7
 
 RUN yum update -y &&\
@@ -77,7 +77,7 @@ CMD ["/usr/share/elasticsearch/bin/elasticsearch"]
 
 <https://hub.docker.com/r/ardeun/elasticsearch>
 
-```sh
+```json
 sh-4.2$ curl -X GET 'localhost:9200/'
 {
   "name" : "netology_test",
