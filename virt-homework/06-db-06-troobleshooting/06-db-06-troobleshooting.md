@@ -92,6 +92,7 @@ shared_buffer
 work_mem
 effective_cache_size
 maintenance_work_mem
+
 - Увеличить объём памяти доступный для использования Postgres.
 ```
 
