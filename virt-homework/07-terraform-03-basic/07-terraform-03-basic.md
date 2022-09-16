@@ -38,6 +38,6 @@ PS C:\Users\anton.moiseev\WSL\devops-netology\virt-homework\07-terraform-03-basi
 
 * Вывод команды `terraform plan` для воркспейса `prod`.  
 
-[terraform_plan](src\terraform_plan.md)
+[terraform_plan](src/terraform_plan.md)
 
 ---
