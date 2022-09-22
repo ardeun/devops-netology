@@ -1,5 +1,5 @@
 variable "yandex_token" {
-   default = "AQAAAAAIA3HqAATuwUL_au8ReERSt-soUNY_tAc"
+   default = ""
 }
 
 variable "yandex_cloud_id" {
