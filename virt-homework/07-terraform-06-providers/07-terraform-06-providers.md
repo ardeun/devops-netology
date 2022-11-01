@@ -17,9 +17,9 @@
 гитхабе.
 
     ---
-    [resource](https://github.com/hashicorp/terraform-provider-aws/blob/86efdc49168a70e4457a700fa176196facfd767c/internal/provider/provider.go#L929)
+   * [resource](https://github.com/hashicorp/terraform-provider-aws/blob/86efdc49168a70e4457a700fa176196facfd767c/internal/provider/provider.go#L929)
 
-    [data_source](https://github.com/hashicorp/terraform-provider-aws/blob/86efdc49168a70e4457a700fa176196facfd767c/internal/provider/provider.go#L419)
+   * [data_source](https://github.com/hashicorp/terraform-provider-aws/blob/86efdc49168a70e4457a700fa176196facfd767c/internal/provider/provider.go#L419)
 
 1. Для создания очереди сообщений SQS используется ресурс `aws_sqs_queue` у которого есть параметр `name`.
     * С каким другим параметром конфликтует `name`? Приложите строчку кода, в которой это указано.
