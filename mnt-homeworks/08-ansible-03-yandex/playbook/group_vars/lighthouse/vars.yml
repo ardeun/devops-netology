@@ -1,4 +1,4 @@
 ---
-lighthouse_src: "https://github.com/VKCOM/lighthouse.git"
+lighthouse_vcs: "https://github.com/VKCOM/lighthouse.git"
 lighthouse_access_log: lighthouse_access
 lighthouse_dir: "/home/{{ ansible_user_id }}/lighthouse"

@@ -51,7 +51,7 @@
       ansible.builtin.get_url:
         url: "https://packages.timber.io/vector/{{ vector_version }}/vector-{{ vector_version }}-1.x86_64.rpm"
         dest: "./vector-{{ vector_version }}-1.x86_64.rpm"
-        mode: 0755
+        mode: 0644
     - name: Install Vector packages
       become: true
       ansible.builtin.yum:
@@ -61,55 +61,61 @@
 - name: Install Nginx
   hosts: lighthouse
   handlers:
-    - name: Start nginx service
+    - name: Start nginx
       become: true
-      ansible.builtin.service:
-        name: nginx
-        state: restarted
+      command: nginx
+    - name: reload-nginx
+        become: true
+        command: nginx -s reload
+
   tasks:
     - name: Install epel-release
-      ansible.builtin.yum:
+      become: true
+      yum:
         name: epel-release
         state: present
     - name: Install Nginx
       become: true
-      ansible.builtin.yum:
+      yum:
         name: nginx
         state: present
-      notify: Start nginx service
+      notify: Start nginx
     - name: Create Nginx config
       become: true
-      ansible.builtin.template:
-        src: nginx.conf
+      template:
+        src: templates/nginx.conf.j2
         dest: /etc/nginx/nginx.conf
-        mode: 0755
-      notify: Start nginx service
+        mode: 0644
+      notify: reload-nginx
+      become: true
 
 - name: Install lighthouse
   hosts: lighthouse
   handlers:
-    - name: Start nginx service
-      become: true
-      ansible.builtin.service:
-        name: nginx
-        state: restarted
-  pre_tasks:
+    - name: reload-nginx
+        become: true
+        command: nginx -s reload
+
+  tasks:
     - name: Install git
       become: true
-      ansible.builtin.yum:
+      yum:
         name: git
         state: present
-  tasks:
-    - name: Copy lighthouse from git
-      ansible.builtin.git:
-        repo: "{{ lighthouse_src }}"
+
+    - name: Create Lighthouse config
+      become: true
+      template:
+        src: templates/default.conf.j2
+        dest: /etc/nginx/conf.d/default.conf
+        mode: 0644
+      notify: reload-nginx
+      become: true
+
+    - name: Copy Lighthouse from git
+      git:
+        repo: "{{ lighthouse_vcs }}"
         version: master
         dest: "{{ lighthouse_dir }}"
-      become: true
-    - name: Create lighthouse config
-      become: true
-      ansible.builtin.template:
-        src: lighthouse.conf
-        dest: /etc/nginx/conf.d/default.conf
-        mode: 0755
-      notify: Start nginx service
+      register: copy_remote
+        
