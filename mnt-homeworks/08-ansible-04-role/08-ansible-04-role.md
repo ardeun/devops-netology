@@ -31,7 +31,9 @@
 11. В ответ приведите ссылки на оба репозитория с roles и одну ссылку на репозиторий с playbook.
 
 ---
+
 + [playbook](https://github.com/ardeun/devops-netology/tree/main/mnt-homeworks/08-ansible-04-role/playbook)
 + [vector-role](https://github.com/ardeun/vector-role.git)
 + [lighthouse-role](https://github.com/ardeun/lighthouse-role.git)
+
 ---
