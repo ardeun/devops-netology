@@ -83,7 +83,8 @@ clickhouse_ready_delay: 5
 #Full form { name:'<username>', password: '<plainpassword>', password_sha256_hex: '<sha256password>',
 #   networks:"<{} with nets>", profile:'<profile>', quota:'<quota>', dbs: '{} with dbs', comment: '<some comment>'}
 #Req: name, password or password_256_hex
-clickhouse_users_custom: {}
+clickhouse_users_custom: 
+  - { name: "netology", password: "netology", networks: "{{ clickhouse_networks_default }}", profile: "netology", quota: "default", comment: "custom user" }
 
 clickhouse_quotas_intervals_default:
   - { duration: 3600, queries: 0, errors: 0, result_rows: 0, read_rows: 0, execution_time: 0 }
