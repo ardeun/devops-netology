@@ -1,0 +1,5 @@
+---
+- name: Test my_module
+  hosts: localhost
+  roles:
+    - role: ardeun.yandex_cloud_elk.test_module
