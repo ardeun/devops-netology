@@ -1,0 +1,8 @@
+---
+- name: Test my_module
+  hosts: localhost
+  tasks:
+    - name: test module
+      my_module:
+        path: 'test_file.txt'
+        content: "test"
