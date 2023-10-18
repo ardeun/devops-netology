@@ -1,0 +1,22 @@
+pipeline {
+    agent {
+        label 'agent'
+    }
+    stages {
+        stage('clone') {
+            steps{
+                git branch: 'main', credentialsId: '2125faaf-b0d9-4446-916a-5170bec0f10e', url: 'git@github.com:ardeun/vector-role.git'
+            }
+        }
+        stage('Install') {
+            steps{
+                sh 'pip3 install --user "molecule==3.4.0" "molecule_docker" "ansible-lint" "yamllint"'
+            }
+        }
+    stage('Run'){
+            steps{
+                    sh 'molecule test'
+            }
+        }
+    }
+}

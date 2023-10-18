@@ -120,8 +120,8 @@
     - name: Add local to PATH
       lineinfile:
         dest: ~/.bashrc
-        regexp: export PATH=$PATH:/home/jenkins/.local/bin
-        line: export PATH=$PATH:/home/jenkins/.local/bin
+        regexp: export PATH=$PATH:/home/haku/.local/bin
+        line: export PATH=$PATH:/home/haku/.local/bin
     - name: Create docker group
       become_user: root
       group:
