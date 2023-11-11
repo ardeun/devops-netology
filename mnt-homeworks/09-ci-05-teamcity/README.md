@@ -33,13 +33,13 @@
 
 ## Ответ
 
-![1](/files/1.png)
+![1](files/1.png)
 
-![2](/files/2.png)
+![2](files/2.png)
 
-![3](/files/3.png)
+![3](files/3.png)
 
-![4](/files/4.png)
+![4](files/4.png)
 
 [example-teamcity](https://github.com/ardeun/example-teamcity/tree/master)
 
