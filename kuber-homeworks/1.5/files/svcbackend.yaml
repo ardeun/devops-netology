@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svcbackend
+spec:
+  selector:
+    app: multitool
+  ports:
+   -  name: backend
+      port: 80
+      protocol: TCP
+      targetPort: multi-http
+     
